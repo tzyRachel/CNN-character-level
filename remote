@@ -1,0 +1,32 @@
+import paramiko
+
+# create ssh
+ssh = paramiko.SSHClient()
+ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+# connect to the server
+ssh.connect(hostname='hamlet.math.toronto.edu', port=22, username='ztao', password='banana6rock12')
+
+# Setup sftp connection and transmit this script
+sftp = ssh.open_sftp()
+
+path_local = 'C:\\Users\\TZY\\PycharmProjects\\CNN-character level\\'
+path_remote = '/tmp/tzy/CNN-character-level/'
+sftp.put(path_local+'data_handling_dna.py', path_remote+'data_handling_dna.py')
+sftp.put(path_local+'model.py', path_remote+'model.py')
+sftp.put(path_local+'test.py', path_remote+'test.py')
+sftp.put(path_local+'train.py', path_remote+'train.py')
+
+path_local = 'C:\\Users\\TZY\\PycharmProjects\\Metagenomic Data\\'
+path_remote = '/tmp/tzy/Metagenomic-Data/'
+# sftp.put(path_local+'10_spe_50to200_test_10k.tsv', path_remote+'10_spe_50to200_test_10k.tsv')
+# sftp.put(path_local+'10_spe_50to200_train_1m.tsv', path_remote+'10_spe_50to200_train_1m.tsv')
+# sftp.put(path_local+'10_spe_50to200_test.tsv', path_remote+'10_spe_50to200_test.tsv')
+# sftp.put(path_local+'label_dict.npy', path_remote+'label_dict.npy')
+
+
+sftp.close()
+stdout = ssh.exec_command('python3/tmp/test.py')[1]
+for line in stdout:
+    print(line)
+
+ssh.close()
