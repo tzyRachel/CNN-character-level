@@ -6,9 +6,9 @@ import csv
 
 LABEL_DICT = np.load('/tmp/tzy/Metagenomic-Data/label_dict.npy',
 					 allow_pickle=True).item()
-#
+
 # LABEL_DICT = np.load('C:\\Users\\TZY\\PycharmProjects\\Metagenomic Data\\label_dict.npy',
-# 					 allow_pickle=True).item()
+#   					 allow_pickle=True).item()
 
 # Reading data from training / testing files and returning one-hot-encodings to driver
 def read_data(filename, alphabet, seq_len, num_classes):

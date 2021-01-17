@@ -14,17 +14,14 @@ sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(gpu_options=gpu_opti
 # train_file = 'C:\\Users\\TZY\\PycharmProjects\\Metagenomic Data\\10_spe_50to200_train_10k.tsv'
 
 train_file = '/tmp/tzy/Metagenomic-Data/10_spe_50to200_train_1m.tsv'
-print(train_file)
 
 filename = train_file
-seq_len = 200 # Fixed length of a sequence of chars, given
+seq_len = 200 # Fixed length of a sequence of chars
 num_classes = 10 # Num of categories/concepts, given
 init_step_size = 0.01 # Given
-max_epochs = 30     # Num of epochs training happens for - arbitarily set to 33 to observe step size decay
-mini_batch_size = 256 # Given value is 128, but I've set to 1 to run quickly on toy data
-momentum = 0.9 # Given
+max_epochs = 30     # Num of epochs training
+mini_batch_size = 256
 alphabet = "ACGT" #alphabet set, given
-alph_size = len(alphabet)
 step_size = init_step_size
 data = data_handling_dna.read_data(filename,alphabet,seq_len,num_classes)
 x = data[0] # Training input character sequences

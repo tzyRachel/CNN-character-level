@@ -7,35 +7,19 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.layers import (Convolution1D, Input, MaxPooling1D, Flatten, Dense, Dropout)
 from tensorflow.keras.initializers import RandomNormal
 from tensorflow.keras.optimizers import SGD
-from tensorflow.keras.callbacks import (LearningRateScheduler, ModelCheckpoint, Callback, ProgbarLogger)
-from tensorflow.keras import backend as K
 
 gpu_options = tf.compat.v1.GPUOptions(allow_growth=True)
 sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(gpu_options=gpu_options))
 
-seq_len = 200 # Fixed length of a sequence of chars, given
-num_classes = 10 # Num of categories/concepts, given
+seq_len = 200 # Fixed length of a sequence of chars
+num_classes = 10 # Num of categories
 init_step_size = 0.01 # Given
-max_epochs = 30     # Num of epochs training happens for - arbitarily set to 33 to observe step size decay
-mini_batch_size = 256 # Given value is 128, but I've set to 1 to run quickly on toy data
-momentum = 0.9 # Given
-alphabet = "ACGT" #alphabet set, given
+max_epochs = 30     # Num of epochs training happens
+mini_batch_size = 256
+momentum = 0.9
+alphabet = "ACGT" #alphabet set
 alph_size = len(alphabet)
 step_size = init_step_size
-
-#Function to implement step size decay (halves every 3 epochs, 10 times)
-def step_size_decay(epoch):
-	if epoch > 1 and epoch <= 30 and epoch%3==1:
-		global step_size
-		step_size = step_size/2
-	return step_size
-
-#Function to print epoch count, loss and step size (to observe decay) after every epoch
-class FlushCallback(Callback):
-	def on_epoch_end(self, epoch, logs={}):
-		optimizer = self.model.optimizer
-		print('Epoch %s: loss %s' % (epoch, logs.get('loss')))
-		print("Step size:",K.eval(optimizer.lr))
 
 #--------------- ConvNet STRUCTURE ------------------#
 
@@ -95,13 +79,4 @@ sgd = SGD(lr=init_step_size, momentum=momentum)
 model = Model(sequence_one_hot, dense4)
 
 model.save('model_200_big.hdf5')
-# model.compile(optimizer='sgd', loss='categorical_crossentropy',metrics=['accuracy'])
 
-# step_size_callback = LearningRateScheduler(step_size_decay)
-#
-# # Callbacks to save and retreive the best weight configurations found during training phase
-# all_callbacks = [step_size_callback, FlushCallback(),
-# 						   ModelCheckpoint('model_200_big' + '.hdf5',
-# 										   save_best_only=True,
-# 										   verbose=1),
-# 						   ProgbarLogger(count_mode='steps')]
